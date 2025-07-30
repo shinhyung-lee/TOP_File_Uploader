@@ -27,3 +27,40 @@
   justify-content: center;
   gap: 1em;
 }
+
+/* index.ejs */
+.folder-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.folder {
+  width: 4rem;
+  height: 2rem;
+  line-height: 2rem;
+  background-color: #F8D775;
+  border-radius: 0.2rem;
+  text-align: center;
+  align-self: center;
+}
+
+.file, .file-head {
+  display: flex;
+  /* justify-content: end; */
+  gap: 1rem;
+  padding: 0.5rem 2rem;
+  border: 2px solid gray;
+}
+th {
+  text-align: left;
+}
+
+#download-btn {
+  background-color: #3EB489;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.4rem;
+  /* html button has a shade around it, removing that */
+  border: none; 
+}
