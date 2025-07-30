@@ -14,7 +14,7 @@ indexRouter.get("/", async (req, res) => {
   })
   console.log(folders);
   // console.log(sessions);
-  res.render("index", { user: req.user });
+  res.render("index", { user: req.user, folders: folders });
 });
 
 module.exports = indexRouter;
