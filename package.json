@@ -1,0 +1,40 @@
+{
+  "name": "fileuploader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "@quixo3/prisma-session-store": "^3.1.13",
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.3",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^24.1.0",
+    "@types/shelljs": "^0.8.17",
+    "fs-extra": "^11.3.0",
+    "nodemon": "^3.1.10",
+    "npm-run-all2": "^8.0.4",
+    "prisma": "^6.12.0",
+    "rimraf": "^6.0.1",
+    "shelljs": "^0.10.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
+  }
+}
