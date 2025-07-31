@@ -1,3 +1,22 @@
+/* header.ejs */
+header {
+  display: flex;
+  justify-content: start;
+  gap: 1rem;
+}
+
+.logout-btn {
+  background-color: #b23b3b;
+  border: none;
+  border-radius: 0.3rem;
+  padding: 0.4rem 0.8rem;
+}
+.logout-btn:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+/*  */
+
 .folder-create-btn {
   width: 8rem;
   height: 1.5rem;
@@ -36,12 +55,13 @@
   gap: 0.5rem;
 }
 
-.folder {
+.folder-btn {
   width: 4rem;
   height: 2rem;
   line-height: 2rem;
   background-color: #F8D775;
   border-radius: 0.2rem;
+  border: none;
   text-align: center;
   align-self: center;
 }

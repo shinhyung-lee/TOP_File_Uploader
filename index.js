@@ -7,7 +7,7 @@ const downloadRouter = require("./routes/downloadRouter");
 const session = require("express-session");
 const { prismaSessionOption } = require("./config/prismaSessionConfig");
 
-// TAKE NOTE we aren't using just the default definition
+// Take note: we aren't using just the default definition
 // const passport = require("passport");
 const passport = require("./config/passportConfig");
 

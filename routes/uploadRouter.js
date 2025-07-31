@@ -2,6 +2,8 @@ const { Router } = require("express");
 const prisma = require("../config/prismaConfig");
 const multer = require("multer");
 const { formattedDateTime } = require("../utils/utils");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -73,11 +75,13 @@ uploadRouter.post(
 
 // add folder to prisma
 uploadRouter.post("/folder", async (req, res, next) => {
-  const name = req.body.folder_name;
+  const folderName = req.body.folder_name;
+
+  // prisma side
   try {
     const folder = await prisma.folder.create({
       data: {
-        name: name,
+        name: folderName,
         author: {
           connect: {
             id: req.user.id,
@@ -90,6 +94,14 @@ uploadRouter.post("/folder", async (req, res, next) => {
   } catch (err) {
     return next(err);
   }
+
+  // on our local file system
+  const folderPath = path.join(__dirname, "../uploads", folderName);
+  fs.mkdirSync(folderPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error("Error creating directory:", err);
+    }
+  });
 });
 
 module.exports = uploadRouter;
