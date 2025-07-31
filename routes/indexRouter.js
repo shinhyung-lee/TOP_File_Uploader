@@ -2,6 +2,9 @@ const { Router } = require("express");
 const prisma = require("../config/prismaConfig");
 const indexRouter = Router();
 
+/**
+ * For resetting folders and files for PRISMA schema change
+ */
 // const deleteFiles = await prisma.file.deleteMany({})
 // const deleteFolders = await prisma.folder.deleteMany({})
 // delete files and folders for Schema change
