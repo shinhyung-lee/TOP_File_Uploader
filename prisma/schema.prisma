@@ -25,9 +25,11 @@ model Folder {
   author         User     @relation(fields: [authorId], references: [id])
   authorId       Int
   // testing
-  parentFolderId Int
-  parentFolder   Folder?  @relation("folderParentChild", fields: [parentFolderId], references: [id])
+  parentFolderId Int?
+  parentFolder   Folder?  @relation("folderParentChild", fields: [parentFolderId], references: [id], onDelete: Cascade)
   childrenFolder Folder[] @relation("folderParentChild")
+  // do not need the below property 
+  isRootFolder   Boolean  @default(false)
 }
 
 model File {

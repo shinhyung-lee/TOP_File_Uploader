@@ -1,33 +1,44 @@
 <html>
 
 <head>
-  <link href="/css/style.css" rel="stylesheet" type="text/css" />
+  <link href="/assets/style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
   <% if (locals.user) {%>
   <%- include('partials/header', { user: user }) %>
 
-  <form action="/upload/folder" method="POST">
-    <button class="folder-create-btn" id="folder-create-btn" type="button">
-      Create folder
-    </button>
+  <% if (locals.currentFolderName) {%>
+  <h4>Current folder: <%= locals.currentFolderName %></h4>
+  <% } else { %>
+  <h4>Current folder: root(top) folder</h4>
+  <% } %>
+
+  <% if (locals.currentFolderId) {%>
+  <form method="GET" action="/view/<%= locals.parentFolderId %>?">
+    <button type="submit" id="back-btn">Back</button>
   </form>
+  <% } %>
+  <button class="folder-create-btn" id="folder-create-btn" type="button">
+    Create folder
+  </button>
   <form action="/upload/file" method="post" enctype="multipart/form-data">
     <input type="file" name="userfile" />
     <input type="submit" value="upload" id="upload_file" />
   </form>
+
   <div id="create-modal" style="display: none">
-    <form method="POST" action="/upload/folder" class="modal-content">
+    <form method="POST" action="/upload/folder/<%= locals.currentFolderId %>" class="modal-content">
       <label for="folder_name">Folder name:</label>
       <input type="text" id="folder_name" name="folder_name" />
       <button type="submit">create</button>
     </form>
   </div>
+  
   <div>
     <div class="folder-container">
       <% locals.folders.map((folder) => { %>
-      <form action="/view/<%= folder.name %>" method="GET">
+      <form method="GET" action="/view/<%= folder.id %>">
         <button type="submit" class="folder-btn"><%= folder.name %></button>
       </form>
       <% }) %>
@@ -53,6 +64,13 @@
             </button>
           </form>
         </td>
+        <td>
+          <form action="/delete" method="DELETE">
+            <button type="submit" id="delete-btn">
+              Delete
+            </button>
+          </form>
+        </td>
       </tr>
       <% }) %>
   </div>
@@ -73,6 +91,10 @@
           modal.style.display = "none";
         }
       };
+      const backbtn = document.getElementById("back-btn");
+      backbtn.addEventListener("click", () => {
+        console.log("back btn clicked");
+      });
     </script>
   </body>
 </html>

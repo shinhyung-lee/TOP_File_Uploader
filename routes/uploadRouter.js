@@ -1,34 +1,25 @@
 const { Router } = require("express");
 const prisma = require("../config/prismaConfig");
 const multer = require("multer");
-const { formattedDateTime } = require("../utils/utils");
 const fs = require("node:fs");
 const path = require("node:path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // cb(null, 'C:/Users/mes/Desktop/multer_storage')
     cb(null, "uploads/");
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
-
 const upload = multer({ storage: storage });
 
 const uploadRouter = Router();
-
-uploadRouter.get("/file", (req, res) => {
-  res.json({ msg: "file upload GET reached" });
-});
 
 uploadRouter.post(
   "/file",
   upload.single("userfile"),
   async (req, res, next) => {
-    // Todo
-    // console.log(req.file);
     console.log(req.file.originalname);
     //   model File {
     //   id        Int      @id @default(autoincrement())
@@ -73,10 +64,14 @@ uploadRouter.post(
   }
 );
 
-// add folder to prisma
-uploadRouter.post("/folder", async (req, res, next) => {
+// DO NOT HAVE TO create folder in the folder/file hierarchy
+// mental model is there, but we can reference them using parentId, childId, currentId
+uploadRouter.post("/folder/{:currentFolderId}", async (req, res, next) => {
   const folderName = req.body.folder_name;
-
+  // req.params.currentFolderId becomes parent folderId
+  // because we are creating a child folder INSIDE OF the parent folder
+  const parentFolderId = req.params.currentFolderId;
+  console.log(`parent folder id is: ${parentFolderId}`);
   // prisma side
   try {
     const folder = await prisma.folder.create({
@@ -87,6 +82,7 @@ uploadRouter.post("/folder", async (req, res, next) => {
             id: req.user.id,
           },
         },
+        parentFolderId: parentFolderId,
       },
     });
     console.log(folder);
@@ -96,6 +92,7 @@ uploadRouter.post("/folder", async (req, res, next) => {
   }
 
   // on our local file system
+  // prolly not needed. Just using the mental model, not creating actual folder. 
   const folderPath = path.join(__dirname, "../uploads", folderName);
   fs.mkdirSync(folderPath, { recursive: true }, (err) => {
     if (err) {

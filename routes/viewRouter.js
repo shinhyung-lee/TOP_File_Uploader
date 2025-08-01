@@ -1,10 +1,11 @@
 const { Router } = require("express");
+const { displayFolder } = require("../controllers/viewController");
 
 const viewRouter = Router();
 
-viewRouter.get("/:folderName", (req, res) => {
-  const folderName = req.params.folderName;
-  res.json({ "msg": `folder router for ${folderName} opened` });
-})
+viewRouter.get("/{:folderId}", displayFolder);
+
+// view parent folder
+viewRouter.get("/", (req, res) => {});
 
 module.exports = viewRouter;

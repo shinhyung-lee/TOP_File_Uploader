@@ -4,6 +4,7 @@ const indexRouter = require("./routes/indexRouter");
 const authRouter = require("./routes/authRouter");
 const uploadRouter = require("./routes/uploadRouter");
 const downloadRouter = require("./routes/downloadRouter");
+const viewRouter = require("./routes/viewRouter");
 const session = require("express-session");
 const { prismaSessionOption } = require("./config/prismaSessionConfig");
 
@@ -23,13 +24,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(__dirname + '/assets'));
+app.use(express.static(__dirname + '/public'));
 
 app.use("/auth", authRouter);
-app.use("/", indexRouter);
 app.use("/upload", uploadRouter);
 app.use("/download", downloadRouter);
+app.use("/view", viewRouter);
+app.use("/", indexRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
+
+// "/upload/folder/:parentFolderId?"
