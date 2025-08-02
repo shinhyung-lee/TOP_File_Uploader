@@ -1,0 +1,4 @@
+uploader
+
+express and prisma (do we need pg installed?)
+-need PassportJS

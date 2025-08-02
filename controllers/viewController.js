@@ -6,80 +6,92 @@ const prisma = require("../config/prismaConfig");
 const displayFolder = async (req, res, next) => {
   // currentFolderId: folder that needs to be displayed
   let currentFolderId = null;
-
+  
   // if not root folder, req.params.folderId was supplied and it will be a string
   if (typeof req.params.folderId === "string") {
     currentFolderId = parseInt(req.params.folderId);
   }
+  console.log(`Current folder id: ${currentFolderId}`);
 
   // root folder
   if (currentFolderId === null) {
-    const folders = await prisma.folder.findMany({
-      where: {
-        authorId: {
-          equals: req.user.id,
+    let folders, files;
+    try {
+      folders = await prisma.folder.findMany({
+        where: {
+          authorId: {
+            equals: req.user.id,
+          },
+          parentFolderId: null,
         },
+      });
+      files = await prisma.file.findMany({
+        where: {
+          authorId: {
+            equals: req.user.id,
+          },
+          folderId: null,
+        },
+      });
+      res.render("index", {
+        user: req.user,
+        folders: folders,
+        files: files,
+        currentFolderId: null,
+        currentFolderName: null,
         parentFolderId: null,
-      },
-    });
-    const files = await prisma.file.findMany({
-      where: {
-        authorId: {
-          equals: req.user.id,
-        },
-        folderId: null,
-      },
-    });
+      });
+    } catch(err) {
+      console.error(err);
+    }
 
-    res.render("index", {
-      user: req.user,
-      folders: folders,
-      files: files,
-      currentFolderId: null,
-      currentFolderName: null,
-      parentFolderId: null,
-    });
     // res.render does not end (req, res) cycle. we need to return
     return;
   }
 
-  // subfolder 
-  const folder = await prisma.folder.findUnique({
-    where: {
-      id: currentFolderId,
-    },
-    include: {
-      files: true,
-      parentFolder: true,
-      childrenFolder: true,
-    },
-  });
-  const currentFolderName = folder.name;
-  const parentFolderIdToCurrentFolder = folder.parentFolderId;
+  // Display subfolder (not root)
+  let folder, childrenFiles, childrenFolders;
+  let currentFolderName, parentFolderIdToCurrentFolder;
+  try {
+    folder = await prisma.folder.findUnique({
+      where: {
+        id: currentFolderId,
+      },
+      include: {
+        files: true,
+        parentFolder: true,
+        childrenFolder: true,
+      },
+    });
 
-  console.log(`parent folder id: ${parentFolderIdToCurrentFolder}`);
+    childrenFiles = await prisma.file.findMany({
+      where: {
+        folderId: currentFolderId,
+      },
+    })
 
-  const childrenFiles = await prisma.file.findMany({
-    where: {
-      folderId: currentFolderId,
-    },
-  })
-  const childrenFolders = await prisma.folder.findMany({
-    where: {
-      parentFolderId: currentFolderId,
-    },
-  });
+    childrenFolders = await prisma.folder.findMany({
+      where: {
+        parentFolderId: currentFolderId,
+      },
+    });
+    currentFolderName = folder.name;
+    parentFolderIdToCurrentFolder = folder.parentFolderId;
+    console.log(`parent folder id: ${parentFolderIdToCurrentFolder}`);
 
-  // console.log(childrenFiles);
+    res.render("index", {
+      user: req.user,
+      folders: childrenFolders,
+      files: childrenFiles,
+      currentFolderId: currentFolderId,
+      currentFolderName: currentFolderName,
+      parentFolderId: parentFolderIdToCurrentFolder,
+    });
+    return;
+  } catch (err) {
+    console.error(err);
+  }
   // console.log(childrenFolders);
-  res.render("index", {
-    user: req.user,
-    folders: childrenFolders,
-    files: childrenFiles,
-    currentFolderId: currentFolderId,
-    currentFolderName: currentFolderName,
-    parentFolderId: parentFolderIdToCurrentFolder,
-  });
 }
 
 module.exports = {

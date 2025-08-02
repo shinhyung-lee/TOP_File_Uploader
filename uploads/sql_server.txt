@@ -1,0 +1,53 @@
+system db - created automatically when we install MS SQL server.
+user db - created by users 
+
+create database <customdbname>
+create database Testdb
+
+cursors 
+result set
+work with one row or a small block of rows at a time. 
+extend result processing 
+
+postgres super user for windows
+Windows
+superuser ID: postgres
+PW: 0000
+
+psql -U postgres // starting postgres server
+role: me, pw: password
+psql -d postgres -U me
+
+
+\du // list all user accounts (or roles) in the current PostgreSQL db server
+\d // shows all the tables in the db
+https://blog.logrocket.com/crud-rest-api-node-js-express-postgresql/ 
+Need a new UI to incorporate the new requirements
+home screen: 
+1. show all users
+2. search users
+3. delete all users 
+
+inventory 
+all tables and fields needed
+1. products (product_name required, category required, price required, 
+quantity > 0) quantity should have + / - button next to it.
+
+categories: car model(a few of them), 
+car parts(outer shield, seat trim, headrest guide), 
+miscellaneous (screws, tapes, etc)
+
+should have categories and items.
+they can choose a category to view, and then get a list of every item in 
+that category.
+
+delete behavior:
+what if category is deleted? Then all products in that category are deleted.
+
+
+
+
+
+
+
+

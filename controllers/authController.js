@@ -42,12 +42,6 @@ const logOut = (req, res, next) => {
       res.redirect("/");
     });
   });
-  // req.logout((err) => {
-  //   if (err) {
-  //     return next(err)
-  //   }
-  //   res.redirect("/");
-  // })
 };
 
 module.exports = {

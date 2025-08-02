@@ -22,7 +22,8 @@
   <button class="folder-create-btn" id="folder-create-btn" type="button">
     Create folder
   </button>
-  <form action="/upload/file" method="post" enctype="multipart/form-data">
+  
+  <form action="/upload/file/<%= locals.currentFolderId %>" method="post" enctype="multipart/form-data">
     <input type="file" name="userfile" />
     <input type="submit" value="upload" id="upload_file" />
   </form>
@@ -34,7 +35,7 @@
       <button type="submit">create</button>
     </form>
   </div>
-  
+
   <div>
     <div class="folder-container">
       <% locals.folders.map((folder) => { %>

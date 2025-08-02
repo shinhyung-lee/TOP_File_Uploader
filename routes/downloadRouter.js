@@ -1,7 +1,7 @@
 const { Router } = require("express");
-const path = require("node:path");
-const downloadRouter = Router();
 const { downloadFile } = require("../controllers/downloadController");
+
+const downloadRouter = Router();
 
 downloadRouter.get("/:filename", downloadFile);
 

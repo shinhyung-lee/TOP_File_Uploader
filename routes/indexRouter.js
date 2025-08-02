@@ -42,9 +42,9 @@ indexRouter.get("/", async (req, res) => {
     user: req.user,
     folders: folders,
     files: files,
-    currentFolderId: undefined,
-    currentFolderName: undefined,
-    parentFolderId: undefined,
+    currentFolderId: null,
+    currentFolderName: null,
+    parentFolderId: null,
   });
 });
 

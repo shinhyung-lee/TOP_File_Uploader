@@ -3,6 +3,7 @@ const prisma = require("../config/prismaConfig");
 const multer = require("multer");
 const fs = require("node:fs");
 const path = require("node:path");
+const { createFile } = require("../utils/query");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -17,10 +18,16 @@ const upload = multer({ storage: storage });
 const uploadRouter = Router();
 
 uploadRouter.post(
-  "/file",
+  "/file/{:folderId}",
   upload.single("userfile"),
   async (req, res, next) => {
-    console.log(req.file.originalname);
+    let currentFolderId = null;
+
+    // if not root folder, req.params.folderId was supplied and it will be a string
+    if (typeof req.params.folderId === "string") {
+      currentFolderId = parseInt(req.params.folderId);
+    }
+    console.log(`Uploading file ${req.file.originalname} on folder id: ${currentFolderId}`);
     //   model File {
     //   id        Int      @id @default(autoincrement())
     //   createdAt DateTime @default(now())
@@ -37,27 +44,44 @@ uploadRouter.post(
     // }
     // folder? use req.params.folderId
     const { originalname, mimetype, path, size } = req.file;
-    // const customFormattedTime = formattedDateTime(req.file.createdAt);
-    const sizeInMegaByte = size / 1000000;
+    // changing kb to Mb
+    const sizeInMegaByte = size / 1000000; 
     const authorId = req.user.id;
-    // insert file into db (prisma)
+
     try {
-      const newFile = await prisma.file.create({
-        data: {
-          title: originalname,
-          mimetype: mimetype,
-          size: sizeInMegaByte,
-          path: path,
-          // formattedTime: customFormattedTime,
-          author: {
-            connect: {
-              id: authorId,
-            },
-          },
-        },
-      });
+      const newFile = createFile(currentFolderId, originalname, mimetype, sizeInMegaByte, path, authorId);
+      // const newFile = await prisma.file.create({
+      //   data: {
+      //     title: originalname,
+      //     mimetype: mimetype,
+      //     size: sizeInMegaByte,
+      //     path: path,
+      //     author: {
+      //       connect: {
+      //         id: authorId,
+      //       },
+      //     },
+      //     folder: (currentFolderId ? {
+      //                 connect: {
+      //                   id: currentFolderId,
+      //                 }
+      //               } : null
+      //             ),
+      //     // folder: {
+      //     //   connect: {
+      //     //     id: currentFolderId,
+      //     //   }
+      //     // }
+      //   },
+      // });
       console.log(newFile);
-      res.redirect("/");
+
+      let redirectUrl = "/";
+      // error occurred because originally redirectUrl += `/view/...`; 
+      if (currentFolderId) {
+        redirectUrl += `view/${currentFolderId}`;
+      }
+      res.redirect(redirectUrl);
     } catch (err) {
       return next(err);
     }
