@@ -10,8 +10,7 @@ const indexRouter = Router();
 // console.log(allFiles)
 // console.log(allFolders)
 
-// ONLY TRIGGERED with initial site visit. Needs to be refactored
-// Todo
+// ONLY TRIGGERED with initial site visit. (NOT TRUE) Needs to be refactored
 indexRouter.get("/", async (req, res) => {
   const sessions = await prisma.session.findMany();
 
@@ -28,6 +27,7 @@ indexRouter.get("/", async (req, res) => {
       authorId: {
         equals: req.user.id,
       },
+      parentFolderId: null,
     },
   });
   const files = await prisma.file.findMany({
@@ -35,6 +35,7 @@ indexRouter.get("/", async (req, res) => {
       authorId: {
         equals: req.user.id,
       },
+      folderId: null,
     },
   });
 

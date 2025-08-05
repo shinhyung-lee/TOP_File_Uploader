@@ -5,8 +5,10 @@ const authRouter = require("./routes/authRouter");
 const uploadRouter = require("./routes/uploadRouter");
 const downloadRouter = require("./routes/downloadRouter");
 const viewRouter = require("./routes/viewRouter");
+const deleteRouter = require("./routes/deleteRouter");
 const session = require("express-session");
 const { prismaSessionOption } = require("./config/prismaSessionConfig");
+const methodOverride = require('method-override');
 
 // Take note: we aren't using just the default definition
 // const passport = require("passport");
@@ -18,6 +20,8 @@ const port = process.env.PORT || 4000;
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
+// html forms only allow GET and POST, need to use method-override middleware to use DELETE method
+app.use(methodOverride('_method'))
 app.use(session(prismaSessionOption));
 
 app.use(passport.initialize());
@@ -30,7 +34,9 @@ app.use("/auth", authRouter);
 app.use("/upload", uploadRouter);
 app.use("/download", downloadRouter);
 app.use("/view", viewRouter);
+app.use("/delete", deleteRouter);
 app.use("/", indexRouter);
+
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

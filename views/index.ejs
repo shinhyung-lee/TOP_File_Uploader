@@ -22,7 +22,7 @@
   <button class="folder-create-btn" id="folder-create-btn" type="button">
     Create folder
   </button>
-  
+
   <form action="/upload/file/<%= locals.currentFolderId %>" method="post" enctype="multipart/form-data">
     <input type="file" name="userfile" />
     <input type="submit" value="upload" id="upload_file" />
@@ -66,8 +66,8 @@
           </form>
         </td>
         <td>
-          <form action="/delete" method="DELETE">
-            <button type="submit" id="delete-btn">
+          <form action="/delete/<%= file.id %>/<%= locals.currentFolderId %>/?_method=DELETE" method="POST">
+            <button type="submit" id="delete-btn"> 
               Delete
             </button>
           </form>

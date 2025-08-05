@@ -17,6 +17,8 @@ const upload = multer({ storage: storage });
 
 const uploadRouter = Router();
 
+// from root
+// filename, folderId: null
 uploadRouter.post(
   "/file/{:folderId}",
   upload.single("userfile"),
@@ -27,7 +29,9 @@ uploadRouter.post(
     if (typeof req.params.folderId === "string") {
       currentFolderId = parseInt(req.params.folderId);
     }
-    console.log(`Uploading file ${req.file.originalname} on folder id: ${currentFolderId}`);
+    console.log(
+      `Uploading file ${req.file.originalname} on folder id: ${currentFolderId}`
+    );
     //   model File {
     //   id        Int      @id @default(autoincrement())
     //   createdAt DateTime @default(now())
@@ -45,11 +49,18 @@ uploadRouter.post(
     // folder? use req.params.folderId
     const { originalname, mimetype, path, size } = req.file;
     // changing kb to Mb
-    const sizeInMegaByte = size / 1000000; 
+    const sizeInMegaByte = size / 1000000;
     const authorId = req.user.id;
 
     try {
-      const newFile = createFile(currentFolderId, originalname, mimetype, sizeInMegaByte, path, authorId);
+      const newFile = createFile(
+        currentFolderId,
+        originalname,
+        mimetype,
+        sizeInMegaByte,
+        path,
+        authorId
+      );
       // const newFile = await prisma.file.create({
       //   data: {
       //     title: originalname,
@@ -77,10 +88,11 @@ uploadRouter.post(
       console.log(newFile);
 
       let redirectUrl = "/";
-      // error occurred because originally redirectUrl += `/view/...`; 
+      // error occurred because originally redirectUrl += `/view/...`;
       if (currentFolderId) {
         redirectUrl += `view/${currentFolderId}`;
       }
+      console.log(`Redirecting to url: ${redirectUrl}`);
       res.redirect(redirectUrl);
     } catch (err) {
       return next(err);
@@ -94,35 +106,44 @@ uploadRouter.post("/folder/{:currentFolderId}", async (req, res, next) => {
   const folderName = req.body.folder_name;
   // req.params.currentFolderId becomes parent folderId
   // because we are creating a child folder INSIDE OF the parent folder
-  const parentFolderId = req.params.currentFolderId;
+  const parentFolderId = parseInt(req.params.currentFolderId);
   console.log(`parent folder id is: ${parentFolderId}`);
   // prisma side
   try {
     const folder = await prisma.folder.create({
       data: {
-        name: folderName,
+        name: folderName, 
         author: {
           connect: {
             id: req.user.id,
           },
         },
-        parentFolderId: parentFolderId,
+        parentFolder: {
+          connect: {
+            id: parentFolderId,
+          },
+        },
       },
     });
     console.log(folder);
-    res.redirect("/");
+    let redirectUrl = "/";
+    // error occurred because originally redirectUrl += `/view/...`;
+    if (parentFolderId) {
+      redirectUrl += `view/${parentFolderId}`;
+    }
+    res.redirect(redirectUrl);
   } catch (err) {
     return next(err);
   }
 
   // on our local file system
-  // prolly not needed. Just using the mental model, not creating actual folder. 
-  const folderPath = path.join(__dirname, "../uploads", folderName);
-  fs.mkdirSync(folderPath, { recursive: true }, (err) => {
-    if (err) {
-      console.error("Error creating directory:", err);
-    }
-  });
+  // prolly not needed. Just using the mental model, not creating actual folder.
+  // const folderPath = path.join(__dirname, "../uploads", folderName);
+  // fs.mkdirSync(folderPath, { recursive: true }, (err) => {
+  //   if (err) {
+  //     console.error("Error creating directory:", err);
+  //   }
+  // });
 });
 
 module.exports = uploadRouter;

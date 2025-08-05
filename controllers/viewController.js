@@ -14,9 +14,12 @@ const displayFolder = async (req, res, next) => {
   console.log(`Current folder id: ${currentFolderId}`);
 
   // root folder
+  // characteristics of folders that are in root folder? 
+  // and the one below
+  // will have children folders 
   if (currentFolderId === null) {
     let folders, files;
-    try {
+    try { 
       folders = await prisma.folder.findMany({
         where: {
           authorId: {
@@ -25,6 +28,7 @@ const displayFolder = async (req, res, next) => {
           parentFolderId: null,
         },
       });
+      console.log(folders);
       files = await prisma.file.findMany({
         where: {
           authorId: {
@@ -33,6 +37,7 @@ const displayFolder = async (req, res, next) => {
           folderId: null,
         },
       });
+      console.log(files);
       res.render("index", {
         user: req.user,
         folders: folders,
