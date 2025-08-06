@@ -1,26 +1,47 @@
 /* header.ejs */
 header {
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
   gap: 1rem;
+  padding: 0 1rem;
+}
+
+header > div {
+  font-weight: bold;
+}
+
+.logout-btn-form {
+  background-color: none;
+  padding: 0;
+  margin: 0;
 }
 
 .logout-btn {
-  background-color: #b23b3b;
-  border: none;
+  background-color: none;
+  /* border: none;
   border-radius: 0.3rem;
-  padding: 0.4rem 0.8rem;
+  padding: 0.4rem 0.8rem; */
+  padding: 0;
+  margin: 0;
+  border: none;
 }
 .logout-btn:hover {
   opacity: 0.8;
   cursor: pointer;
+}
+
+#logout-icon {
+  width: 1.9rem;
+  background-color: #3eb489;
+  padding: 0;
+  margin: 0;
 }
 /*  */
 
 .folder-create-btn {
   width: 8rem;
   height: 1.5rem;
-  background-color: lightslategray;
+  background-color: #3E51C9;
   border-radius: 3px;
   border: none;
   margin-bottom: 10px;
@@ -66,6 +87,13 @@ header {
   border: none;
   text-align: center;
   align-self: center;
+}
+
+#upload_file {
+  background-color: #3E51C9;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.3rem;
 }
 
 #back-btn {

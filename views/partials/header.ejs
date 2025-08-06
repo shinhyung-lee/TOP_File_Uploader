@@ -1,6 +1,8 @@
 <header>
-  <h4>Welcome back <%= user.username %></h4>
-  <form action="/auth/logout" method="POST">
-    <button type="submit" class="logout-btn">Log out</button>
+  <div>File Uploader</div>
+  <form action="/auth/logout" method="POST" class="logout-btn-form">
+    <button type="submit" class="logout-btn">
+      <img src="/logout_icon.png" alt="logout icon" id="logout-icon" />
+    </button>
   </form>
 </header>

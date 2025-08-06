@@ -8,6 +8,12 @@
   <% if (locals.user) {%>
   <%- include('partials/header', { user: user }) %>
 
+  <% if (locals.folderHierarchy) {%>
+    <% locals.folderHierarchy.map((folder) => { %>
+      <span><%= folder %> ></span>
+    <% }) %>
+  <% } %>
+
   <% if (locals.currentFolderName) {%>
   <h4>Current folder: <%= locals.currentFolderName %></h4>
   <% } else { %>
@@ -48,16 +54,16 @@
   <div>
     <table class="file-container">
       <tr class="file-head">
-        <th>Filename</th>
-        <th>Size (MB)</th>
-        <th>Uploaded At</th>
+        <th>Name</th>
+        <th>Size</th>
+        <th>Created</th>
         <th></th>
       </tr>
       <% locals.files.map((file) => { %>
       <tr class="file">
         <td><%= file.title %></td>
         <td><%= file.size %> Mb</td>
-        <td><%= String(file.createdAt).slice(4, 24) %></td>
+        <td><%= String(file.createdAt).slice(4, 15) %></td>
         <td>
           <form action="/download/<%= file.title %>" method="GET">
             <button type="submit" id="download-btn">

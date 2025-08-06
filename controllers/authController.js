@@ -1,20 +1,30 @@
 const prisma = require("../config/prismaConfig");
+const { supabase } = require("../config/supabaseConfig");
 
 const createUser = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
   console.log(`Username: ${username}`);
-  try {
-    const user = await prisma.user.create({
-      data: {
-        username,
-        password,
-      },
-    });
-    console.log(user);
-    res.redirect("/auth/login");
-  } catch (err) {
-    return next(err);
+  // try {
+  //   const user = await prisma.user.create({
+  //     data: {
+  //       username,
+  //       password,
+  //     },
+  //   });
+  //   console.log(user);
+  //   res.redirect("/auth/login");
+  // } catch (err) {
+  //   return next(err);
+  // }
+  const { data, error } = await supabase.auth.signUp({
+    username,
+    password,
+  });
+  if (error) {
+    console.error("Error signing up:", error.message);
+  } else {
+    console.log("User signed up successfully:", data.user);
   }
 };
 

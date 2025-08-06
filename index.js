@@ -1,3 +1,4 @@
+const dotenv = require('dotenv')
 const express = require("express");
 const path = require("node:path");
 const indexRouter = require("./routes/indexRouter");
@@ -9,7 +10,9 @@ const deleteRouter = require("./routes/deleteRouter");
 const session = require("express-session");
 const { prismaSessionOption } = require("./config/prismaSessionConfig");
 const methodOverride = require('method-override');
+const { createBucketIfNotExists, checkIfAuthenticated } = require("./config/supabaseConfig");
 
+dotenv.config();
 // Take note: we aren't using just the default definition
 // const passport = require("passport");
 const passport = require("./config/passportConfig");
@@ -23,6 +26,10 @@ app.set("view engine", "ejs");
 // html forms only allow GET and POST, need to use method-override middleware to use DELETE method
 app.use(methodOverride('_method'))
 app.use(session(prismaSessionOption));
+
+// check SUPABASE status 
+// checkIfAuthenticated();
+// createBucketIfNotExists("files");
 
 app.use(passport.initialize());
 app.use(passport.session());

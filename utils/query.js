@@ -3,6 +3,7 @@ const prisma = require("../config/prismaConfig");
 
 const createFile = async (currentFolderId, title, mimetype, size, path, authorId) => {
   let newFile;
+  // not root folder
   if (currentFolderId) {
     newFile = await prisma.file.create({
                 data: {
@@ -22,7 +23,7 @@ const createFile = async (currentFolderId, title, mimetype, size, path, authorId
                   }
                 },
         });
-  } else {
+  } else { // root folder 
     newFile = await prisma.file.create({
                 data: {
                   title: title,
@@ -37,7 +38,6 @@ const createFile = async (currentFolderId, title, mimetype, size, path, authorId
                 },
               });
   }
-
   return newFile;
 } 
 

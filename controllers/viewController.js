@@ -13,6 +13,9 @@ const displayFolder = async (req, res, next) => {
   }
   console.log(`Current folder id: ${currentFolderId}`);
 
+  const prevFolderId = res.locals.parentFolderId;
+
+  console.log(`Prev folder id: ${prevFolderId}, Curr folder id: ${currentFolderId}`);
   // root folder
   // characteristics of folders that are in root folder? 
   // and the one below
@@ -45,6 +48,7 @@ const displayFolder = async (req, res, next) => {
         currentFolderId: null,
         currentFolderName: null,
         parentFolderId: null,
+        folderHierarchy: [ req.user.username, ],
       });
     } catch(err) {
       console.error(err);
