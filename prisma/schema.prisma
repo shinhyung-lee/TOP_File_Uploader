@@ -14,14 +14,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// folders can have multiple folders inside (nested structure)
+// one-to-many (parent-child)
 model Folder {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String   @db.VarChar(255)
-  files     File[]
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  name           String   @db.VarChar(255)
+  files          File[]
+  author         User     @relation(fields: [authorId], references: [id])
+  authorId       Int
+  // testing
+  parentFolderId Int?
+  parentFolder   Folder?  @relation("folderParentChild", fields: [parentFolderId], references: [id], onDelete: Cascade)
+  childrenFolder Folder[] @relation("folderParentChild")
+  // do not need the below property 
+  isRootFolder   Boolean  @default(false)
 }
 
 model File {
@@ -30,7 +38,7 @@ model File {
   updatedAt DateTime @updatedAt
   title     String   @db.VarChar(255)
   content   String?
-  size      Int
+  size      Decimal  @db.Decimal(10, 3)
   mimetype  String   @db.VarChar(255)
   path      String   @db.VarChar(255)
   author    User     @relation(fields: [authorId], references: [id])

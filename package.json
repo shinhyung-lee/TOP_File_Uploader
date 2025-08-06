@@ -13,13 +13,20 @@
   "dependencies": {
     "@prisma/client": "^6.12.0",
     "@quixo3/prisma-session-store": "^3.1.13",
+    "@supabase/supabase-js": "^2.53.0",
+    "autoprefixer": "^10.4.21",
     "body-parser": "^2.2.0",
+    "dotenv": "^17.2.1",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
+    "method-override": "^3.0.0",
     "multer": "^2.0.2",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.1.11"
   },
   "devDependencies": {
     "@types/ejs": "^3.1.5",

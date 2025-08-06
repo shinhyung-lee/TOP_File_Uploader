@@ -1,0 +1,60 @@
+postgres
+11/2 morning
+
+what is a cluster?
+table -> DB -> cluster
+-CREATE TABLE
+-DROP TABLE tablename;
+-DISTINCT
+-SELECT * is a bad style in production code
+varchar(80) - a data type that can store arbitrary charater strings up to 80 characters in length.
+int - normal integer type
+real - type for storing single precision floating-point numbers
+date - self-explanatory
+
+postgres supports the standard SQL types int, smallint, real, double precision, char(N), varchar(N), date, time, timestamp, and interval, as well as other types of general utility and a rich set of geometric types.
+
+point - PostgreSQL specific data type.
+CREATE TABLE cities (
+	name 		varchar(80),
+	location 	point
+);
+
+Many developers consider explicitly listing the columns better style than relying on the order implicitly.
+INSERT INTO weather (date, city, temp_hi, temp_lo)
+	VALUES ('1994-11-29', 'Hayward', 54, 37);
+
+-SELECT statement
+
+boolean expressions in WHERE 
+(AND, OR, and NOT allowed)
+
+-DISTINCT
+SELECT DISTINCT city
+	FROM weather;
+
+---11/3/2023---
+LIKE, SIMILAR TO, POSIX Regular Expressions
+string LIKE pattern [ESCAPE escape-character]
+string NOT LIKE pattern [ESCAPE escape-character]
+
+-An underscore (_) in pattern stands for (matches) any single character; a percent sign (%) matches any sequence of zero or more characters.
+
+substring with pattern, escape-character
+<DELETION>
+`DELETE FROM weather WHERE city = 'Hayward';`
+DELETE FROM tablename; will remove all rows from the given table! Be careful.
+
+Chap 3. Advanced Features
+Views
+-can create a view over the query,  which gives a name to the query that you can refer to like an ordinary table
+
+CREATE VIEW myview AS
+    SELECT name, temp_lo, temp_hi, prcp, date, location
+        FROM weather, cities
+        WHERE city = name;
+
+SELECT * FROM myview;
+
+
+
